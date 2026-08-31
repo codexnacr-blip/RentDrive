@@ -1,0 +1,144 @@
+﻿@model RentDrive.Models.VehiculoViewModel
+
+@{
+    ViewData["Title"] = "Catálogo de Vehículos para Producción";
+}
+
+<div class="p-4 mb-4 rounded-3 filter-box">
+    <h2 class="fw-bold mb-1 text-white">Buscador de Estética y Producción</h2>
+    <p class="text-muted mb-3">Filtra la flota según la época, el concepto visual y los requerimientos de tu rodaje.</p>
+    
+    <form method="get" asp-action="Index" class="row g-3">
+        <div class="col-md-3">
+            <label class="form-label text-light small fw-bold">Época / Década</label>
+            <select name="epoca" class="form-select form-select-dark">
+                <option value="">Todas las épocas</option>
+                @foreach (var epoca in Model.Epocas)
+                {
+                    <option value="@epoca" selected="@(Model.Epoca == epoca)">@epoca</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label text-light small fw-bold">Estilo Visual</label>
+            <select name="estilo" class="form-select form-select-dark">
+                <option value="">Todos los estilos</option>
+                @foreach (var estilo in Model.Estilos)
+                {
+                    <option value="@estilo" selected="@(Model.Estilo == estilo)">@estilo</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label text-light small fw-bold">Color Exterior</label>
+            <select name="color" class="form-select form-select-dark">
+                <option value="">Cualquier color</option>
+                @foreach (var color in Model.Colores)
+                {
+                    <option value="@color" selected="@(Model.Color == color)">@color</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-danger w-100 fw-bold">Filtrar Escenarios</button>
+        </div>
+    </form>
+</div>
+
+<div class="row g-4">
+    @if (Model.Vehiculos.Any())
+    {
+        @foreach (var car in Model.Vehiculos)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="card-vehicle h-100 d-flex flex-column justify-content-between p-3">
+                    <div>
+                        <div class="position-relative mb-3 overflow-hidden rounded" style="height: 200px;">
+                            <img src="@car.ImagenURL" alt="@car.Marca @car.Modelo" class="w-100 h-100" style="object-fit: cover;" />
+                            <span class="position-absolute top-0 start-0 badge badge-epoca m-2 px-2 py-1">@car.Epoca</span>
+                            <span class="position-absolute top-0 end-0 badge badge-estilo m-2 px-2 py-1">@car.EstiloVisual</span>
+                        </div>
+
+                        <h4 class="text-white fw-bold mb-1">@car.Marca @car.Modelo (@car.Año)</h4>
+                        <p class="text-muted small mb-2">@car.DescripcionEscenario</p>
+
+                        <div class="mb-3">
+                            <small class="d-block text-secondary"><strong>Color Exterior:</strong> @car.ColorExt</small>
+                            <small class="d-block text-secondary"><strong>Color Interior:</strong> @car.ColorInt</small>
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-1 mb-3">
+                            @foreach (var detalle in car.Detalles)
+                            {
+                                <span class="badge bg-dark text-light border border-secondary small"># @detalle</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div>
+                        <hr class="border-secondary my-2" />
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <span class="fs-5 fw-bold text-warning">$@car.TarifaHora</span>
+                                <small class="text-muted">/ hora</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="fs-6 fw-semibold text-light">$@car.TarifaDia</span>
+                                <small class="text-muted d-block">/ día completo</small>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-outline-warning w-100 fw-semibold" data-bs-toggle="modal" data-bs-target="#cotizarModal-@car.ID">
+                            Cotizar Rodaje
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="cotizarModal-@car.ID" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content bg-dark text-white border-secondary">
+                        <div class="modal-header border-secondary">
+                            <h5 class="modal-title fw-bold text-warning">Reserva de Escenario: @car.Marca @car.Modelo</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="small text-muted">Selecciona la modalidad requerida para tu plan de rodaje o sesión de fotos</p>
+                            <div class="mb-3">
+                                <label class="form-label small">Tipo de Renta</label>
+                                <select class="form-select form-select-dark">
+                                    <option value="horas">Sesión Rápida (Por Horas - $@car.TarifaHora/h)</option>
+                                    <option value="dias">Jornada Completa / Días ($@car.TarifaDia/día)</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small">Fecha de Rodaje</label>
+                                <input type="date" class="form-control form-control-dark" />
+                            </div>
+                            @if (car.TieneChofer)
+                            {
+                                <div class="alert alert-info bg-dark text-info border-info small mb-0">
+                                    Este vehículo incluye chofer especializado para maniobras en Set.
+                                </div>
+                            }
+                        </div>
+                        <div class="modal-footer border-secondary">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-danger">Confirmar Cotización</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12 text-center py-5">
+            <p class="fs-4 text-muted">No se encontraron vehículos que coincidan con los criterios estéticos seleccionados.</p>
+            <a asp-action="Index" class="btn btn-outline-danger">Restablecer Filtros</a>
+        </div>
+    }
+</div>
