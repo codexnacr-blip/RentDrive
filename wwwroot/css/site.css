@@ -1,0 +1,88 @@
+html {
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 60px;
+  background-color: #0d0e12;
+  color: #e0e6ed;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.navbar-create {
+  background-color: #16181e !important;
+  border-bottom: 1px solid #2a2e3d !important;
+}
+
+.brand-text {
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(45deg, #ff3366, #ff9933);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card-vehicle {
+  background-color: #16181e;
+  border: 1px solid #2a2e3d;
+  border-radius: 12px;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  overflow: hidden;
+}
+
+
+.card-vehicle:hover {
+  transform: translateY(-4px);
+  border-color: #ff3366;
+}
+
+.badge-epoca {
+  background-color: #2a2e3d;
+  color: #ff9933;
+  border: 1px solid #ff9933;
+}
+
+.badge-estilo {
+  background-color: #251628;
+  color: #ff3366;
+  border: 1px solid #ff3366;
+}
+
+.filter-box {
+  background-color: #16181e;
+  border: 1px solid #2a2e3d;
+  border-radius: 12px;
+}
+
+.form-select-dark, .form-control-dark {
+  background-color: #0d0e12;
+  border: 1px solid #2a2e3d;
+  color: #fff;
+}
+
+.form-select-dark:focus, .form-control-dark:focus {
+  background-color: #0d0e12;
+  border-color: #ff3366;
+  color: #fff;
+  box-shadow: 0 0 0 0.25rem rgba(255, 51, 102, 0.25);
+}
+
+.footer-create {
+  background-color: #16181e;
+  border-top: 1px solid #2a2e3d !important;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+}
